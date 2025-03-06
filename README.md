@@ -48,7 +48,7 @@ This project demonstrates an **SPI-based communication system** between an **ESP
 ## Demo
 
 Check out the demonstration video of the project in action:  
-[https://www.linkedin.com/posts/ramu-roy-b780382b7_embeddedsystems-spicommunication-esp32-activity-7303300003546996736-tI5h?utm_source=social_share_send&utm_medium=android_app&rcm=ACoAAEwAX4wBY70YZ3l58lvkiXtyCZcnWWrfJAA&utm_campaign=copy_link] 🎥
+🔗 [Click here to watch the demonstration on LinkedIn](https://www.linkedin.com/posts/ramu-roy-b780382b7_embeddedsystems-spicommunication-esp32-activity-7303300003546996736-tI5h?utm_source=social_share_send&utm_medium=android_app&rcm=ACoAAEwAX4wBY70YZ3l58lvkiXtyCZcnWWrfJAA&utm_campaign=copy_link)
 
 
 ## License
