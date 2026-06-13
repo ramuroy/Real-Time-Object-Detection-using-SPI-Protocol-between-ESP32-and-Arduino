@@ -1,5 +1,11 @@
 # SPI-Based Object Detection using ESP32 & Arduino 🚀🎯
 
+![ESP32](https://img.shields.io/badge/ESP32-Master-E7352C?style=flat-square&logo=espressif&logoColor=white)
+![Arduino](https://img.shields.io/badge/Arduino-Slave-00979D?style=flat-square&logo=arduino&logoColor=white)
+![SPI](https://img.shields.io/badge/Protocol-SPI-660066?style=flat-square)
+![C++](https://img.shields.io/badge/C++-00599C?style=flat-square&logo=cplusplus&logoColor=white)
+![License](https://img.shields.io/badge/License-MIT-3da639?style=flat-square)
+
 ## Project Overview
 
 This project demonstrates an **SPI-based communication system** between an **ESP32 (Master)** and an **Arduino (Slave)** for **object detection** using an **IR sensor**. The **ESP32** acts as the master device, sending signals to the **Arduino**, which outputs relevant messages to the **Serial Monitor**.
