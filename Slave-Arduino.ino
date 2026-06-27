@@ -28,7 +28,10 @@ void setup() {
 ISR(SPI_STC_vect) {
   char c = SPDR;            // read the just-received byte
 
-  if (messageReady) return; // hold the last message until loop() consumes it
+  // Hold the last message until loop() consumes it. Any bytes clocked in
+  // during that short window are dropped — fine here, since the master only
+  // sends on a new IR edge, far slower than loop() drains the buffer.
+  if (messageReady) return;
 
   if (c == '\n') {          // end of message
     receivedData[idx] = '\0';
