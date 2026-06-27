@@ -8,58 +8,65 @@
 
 ## Project Overview
 
-This project demonstrates an **SPI-based communication system** between an **ESP32 (Master)** and an **Arduino (Slave)** for **object detection** using an **IR sensor**. The **ESP32** acts as the master device, sending signals to the **Arduino**, which outputs relevant messages to the **Serial Monitor**.
+This project demonstrates an **SPI-based communication system** between an **ESP32 (Master)** and an **Arduino (Slave)** for **object detection** using an **IR sensor**. The **ESP32** acts as the master device, sending a message to the **Arduino**, which outputs it to the **Serial Monitor**.
 
 ## Key Features
 
 - **Master-Slave SPI Communication** between **ESP32** and **Arduino** 🔄
 - **IR Sensor** for detecting objects and triggering the communication process 🛸
-- **Real-Time Object Detection** where detected objects are communicated via SPI ⏱️
+- **Edge-triggered detection** — one message per detection event, not a flood ⏱️
+- **Interrupt-driven slave** (`SPI_STC_vect`) with a bounds-checked receive buffer 🛡️
 - **Serial Monitor Output** on Arduino to display the results 💻
 
 ## How It Works
 
-1. **IR Sensor Detection**: The **IR sensor** detects an object and sends a signal to the **ESP32 (Master)**.
-2. **SPI Communication**: The **ESP32** sends the signal to the **Arduino (Slave)** via the **SPI protocol** 🔗.
-3. **Serial Monitor**: The **Arduino (Slave)** receives the data and outputs a message to the **Serial Monitor**, indicating the object detection status 📡.
+1. **IR Sensor Detection**: the **IR sensor** detects an object, pulling the ESP32 input LOW.
+2. **SPI Communication**: on the new-detection edge, the **ESP32** sends one timestamped, newline-terminated message to the **Arduino (Slave)** over SPI 🔗.
+3. **Serial Monitor**: the **Arduino** receives each byte in its SPI interrupt, reassembles the message, and prints it to the **Serial Monitor** 📡.
 
 ## Components Used
 
 - **ESP32** (Master) 🌍
-- **Arduino** (Slave) 🤖
+- **Arduino Uno** (Slave) 🤖
 - **IR Sensor** 🔍
 - Connecting Wires 🔌
 - Breadboard (optional) 🧑‍🔬
 
 ## How to Run
 
-### 1. Setup
+### 1. Wiring
 
-- Connect the **IR sensor** to the **ESP32** as per the wiring diagram.
-- Connect the **ESP32** and **Arduino** using the SPI pins:  
-  - **MOSI** (ESP32) to **MOSI** (Arduino)  
-  - **MISO** (ESP32) to **MISO** (Arduino)  
-  - **SCK** (ESP32) to **SCK** (Arduino)  
-  - **CS** (ESP32) to **SS** (Arduino)
+The Arduino Uno's SPI pins are fixed; the ESP32 uses the custom pins defined in the sketch:
+
+| Signal | ESP32 (Master) | Arduino Uno (Slave) |
+|--------|:--------------:|:-------------------:|
+| SCK    | GPIO 26 | D13 |
+| MOSI   | GPIO 33 | D11 |
+| MISO   | GPIO 25 | D12 |
+| SS / CS | GPIO 5 | D10 |
+| GND    | GND | GND |
+
+- **IR sensor** → ESP32 **GPIO 35** &nbsp;•&nbsp; detection **LED** → ESP32 **GPIO 27**
+
+> ⚠️ **Logic levels:** the ESP32 is 3.3 V and the Uno is 5 V. The master only drives SCK/MOSI/SS into the Uno (3.3 V is read as a valid HIGH), and MISO is unused in this one-way demo, so a direct connection works for a quick test — but for a robust build add a level shifter on those lines.
 
 ### 2. Upload the Code
 
-- Upload the code to the **ESP32** and **Arduino** from the respective IDEs (Arduino IDE for Arduino, ESP32 compatible IDE for ESP32).
-- Open the **Serial Monitor** on the **Arduino IDE** to see the output.
+- Upload `Mastercode-ESP32.ino` to the **ESP32** and `Slave-Arduino.ino` to the **Arduino Uno**, each from its own sketch in the Arduino IDE.
+- Open the **Serial Monitor** on the Arduino (115200 baud) to see the output.
 
 ### 3. Observe the Results
 
-- When an object is detected by the **IR sensor**, the **ESP32** will send a signal to the **Arduino**, and the Arduino will print the detection result to the **Serial Monitor**.
+- When an object is detected by the **IR sensor**, the **ESP32** sends a single message and the Arduino prints the detection result to the **Serial Monitor**.
 
 ## Demo
 
 Check out the demonstration video of the project in action:  
 🔗 [Click here to watch the demonstration on LinkedIn](https://www.linkedin.com/posts/ramu-roy-b780382b7_embeddedsystems-spicommunication-esp32-activity-7303300003546996736-tI5h?utm_source=social_share_send&utm_medium=android_app&rcm=ACoAAEwAX4wBY70YZ3l58lvkiXtyCZcnWWrfJAA&utm_campaign=copy_link)
 
-
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
